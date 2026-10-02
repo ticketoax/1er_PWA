@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coffee PWA</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Color de la PWA -->
+    <meta name="theme-color" content="#124443">
+
+    <!-- Iconos --> 
+    <link rel="apple-touch-icon" sizes="72x72" href="imagenes/icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="imagenes/icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="imagenes/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="imagenes/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="imagenes/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="imagenes/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="imagenes/icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="imagenes/icons/icon-512x512.png">
+
+</head>
+
+<body>
+
+    <main>
+
+        <nav>
+            <h1>Coffee PWA</h1>
+
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Contact</li>
+            </ul>
+        </nav>
+
+        <div class="toolbar">
+            <button id="boton-instalar" class="boton-instalar" hidden>Instalar app</button>
+        </div>
+
+        <div class="container" id="lista-cafes"></div>
+
+    </main>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            const esLocalhost = ['localhost', '127.0.0.1', ''].includes(window.location.hostname)
+                || window.location.protocol === 'https:';
+
+            if (esLocalhost) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./serviceworker.js', { scope: './' })
+                        .then(() => {
+                            console.log('Service Worker registrado correctamente');
+                        })
+                        .catch((error) => {
+                            console.error('Error al registrar Service Worker:', error);
+                        });
+                });
+            }
+        }
+    </script>
+
+</body>
+
+</html>

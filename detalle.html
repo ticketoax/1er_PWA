@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del café</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#124443">
+</head>
+
+<body>
+    <main>
+        <nav>
+            <h1>Coffee PWA</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li>About</li>
+                <li>Contact</li>
+            </ul>
+        </nav>
+
+        <div class="detalle-page">
+            <button type="button" class="btn-volver-pagina" onclick="window.location.href='index.html'">← Volver</button>
+            <section id="detalle-producto" class="detalle-producto" aria-live="polite"></section>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./serviceworker.js', { scope: './' })
+                    .then(() => console.log('Service Worker registrado correctamente'))
+                    .catch((error) => console.error('Error al registrar Service Worker:', error));
+            });
+        }
+    </script>
+</body>
+
+</html>
