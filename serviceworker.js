@@ -8,7 +8,6 @@ const ARCHIVOS = [
     './manifest.json',
     './css/style.css',
     './js/app.js',
-
     './imagenes/icons/icon-72x72.png',
     './imagenes/icons/icon-96x96.png',
     './imagenes/icons/icon-128x128.png',
@@ -19,8 +18,8 @@ const ARCHIVOS = [
     './imagenes/icons/icon-512x512.png'
 ];
 
+// INSTALAR SERVICE WORKER
 self.addEventListener('install', (event) => {
-
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -31,42 +30,82 @@ self.addEventListener('install', (event) => {
     self.skipWaiting();
 });
 
-
+// ACTIVAR SERVICE WORKER
 self.addEventListener('activate', (event) => {
-
     event.waitUntil(
         caches.keys()
             .then((nombres) => {
-
                 return Promise.all(
                     nombres
                         .filter(nombre => nombre !== CACHE_NAME)
                         .map(nombre => caches.delete(nombre))
                 );
-
             })
     );
 
     self.clients.claim();
 });
 
+// CACHE FIRST
+function cacheFirst(request) {
+    return caches.match(request)
+        .then((respuesta) => {
+            if (respuesta) {
+                return respuesta;
+            }
 
+            return fetch(request);
+        });
+}
+
+// NETWORK FIRST
+function networkFirst(request) {
+    return fetch(request)
+        .then((respuesta) => {
+            if (respuesta && respuesta.ok) {
+                const copia = respuesta.clone();
+
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        cache.put(request, copia);
+                    });
+            }
+
+            return respuesta;
+        })
+        .catch(() => {
+            return caches.match(request)
+                .then((respuesta) => {
+                    if (respuesta) {
+                        return respuesta;
+                    }
+
+                    return new Response('No hay conexión a internet ni una copia guardada.', {
+                        status: 503,
+                        headers: {
+                            'Content-Type': 'text/plain; charset=utf-8'
+                        }
+                    });
+                });
+        });
+}
+
+// EVENTO FETCH
 self.addEventListener('fetch', (event) => {
+    if (event.request.method !== 'GET') {
+        return;
+    }
 
-    event.respondWith(
+    const url = new URL(event.request.url);
 
-        caches.match(event.request)
-            .then((respuesta) => {
+    // CACHE FIRST: archivos locales
+    if (url.origin === self.location.origin &&
+        !url.pathname.endsWith('.html')) {
+        event.respondWith(cacheFirst(event.request));
+    }
 
-                if (respuesta) {
-                    return respuesta;
-                }
-
-                return fetch(event.request);
-
-            })
-
-    );
-
+    // NETWORK FIRST: páginas HTML
+    else {
+        event.respondWith(networkFirst(event.request));
+    }
 });
-
