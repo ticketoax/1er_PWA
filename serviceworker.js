@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "coffee-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v17`;
+const CACHE_NAME = `${CACHE_PREFIX}v18`;
 const STATIC_DESTINATIONS = new Set([
   "font",
   "image",
@@ -7,32 +7,34 @@ const STATIC_DESTINATIONS = new Set([
   "script",
   "style"
 ]);
+
 const ASSETS_TO_CACHE = [
-  "/index.html",
-  "/detalle.html",
-  "/js/app.js",
-  "/js/pokemon.service.js",
-  "/js/pokemon.ui.js",
-  "/manifest.json",
-  "/css/style.css",
-  "/imagenes/coffe1.jpg",
-  "/imagenes/coffe2.jpg",
-  "/imagenes/coffe3.jpg",
-  "/imagenes/coffe4.jpg",
-  "/imagenes/coffe5.jpg",
-  "/imagenes/coffe6.jpg",
-  "/imagenes/coffe7.jpg",
-  "/imagenes/coffe8.jpg",
-  "/imagenes/coffe9.jpg",
-  "/imagenes/coffe10.jpeg",
-  "/imagenes/icons/icon-72x72.png",
-  "/imagenes/icons/icon-96x96.png",
-  "/imagenes/icons/icon-128x128.png",
-  "/imagenes/icons/icon-144x144.png",
-  "/imagenes/icons/icon-152x152.png",
-  "/imagenes/icons/icon-192x192.png",
-  "/imagenes/icons/icon-384x384.png",
-  "/imagenes/icons/icon-512x512.png"
+  "./",
+  "./index.html",
+  "./detalle.html",
+  "./js/app.js",
+  "./js/pokemon.service.js",
+  "./js/pokemon.ui.js",
+  "./manifest.json",
+  "./css/style.css",
+  "./imagenes/coffe1.jpg",
+  "./imagenes/coffe2.jpg",
+  "./imagenes/coffe3.jpg",
+  "./imagenes/coffe4.jpg",
+  "./imagenes/coffe5.jpg",
+  "./imagenes/coffe6.jpg",
+  "./imagenes/coffe7.jpg",
+  "./imagenes/coffe8.jpg",
+  "./imagenes/coffe9.jpg",
+  "./imagenes/coffe10.jpeg",
+  "./imagenes/icons/icon-72x72.png",
+  "./imagenes/icons/icon-96x96.png",
+  "./imagenes/icons/icon-128x128.png",
+  "./imagenes/icons/icon-144x144.png",
+  "./imagenes/icons/icon-152x152.png",
+  "./imagenes/icons/icon-192x192.png",
+  "./imagenes/icons/icon-384x384.png",
+  "./imagenes/icons/icon-512x512.png"
 ];
 
 self.addEventListener("install", (event) => {
