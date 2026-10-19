@@ -1,43 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del café</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Detalle del producto | Coffee PWA</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#124443">
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style.css?v=17">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#3D2314">
 </head>
-
 <body>
     <main>
-        <nav>
-            <h1>Coffee PWA</h1>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li>About</li>
-                <li>Contact</li>
-            </ul>
-        </nav>
+        <header class="app-header">
+            <nav>
+                <a href="/index.html" class="brand" aria-label="Coffee PWA Inicio">
+                    <img src="/imagenes/icons/icon-72x72.png" alt="Coffee PWA Logo" class="brand-logo">
+                    <h1>Coffee PWA</h1>
+                </a>
+                <ul>
+                    <li><a href="/index.html">Menú</a></li>
+                </ul>
+            </nav>
+        </header>
 
-        <div class="detalle-page">
-            <button type="button" class="btn-volver-pagina" onclick="window.location.href='index.html'">← Volver</button>
-            <section id="detalle-producto" class="detalle-producto" aria-live="polite"></section>
-        </div>
+        <section class="product-detail" id="detalle-producto"></section>
     </main>
 
-    <script src="js/app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./serviceworker.js', { scope: './' })
-                    .then(() => console.log('Service Worker registrado correctamente'))
-                    .catch((error) => console.error('Error al registrar Service Worker:', error));
-            });
-        }
-    </script>
+    <script src="/js/pokemon.service.js?v=17"></script>
+    <script src="/js/pokemon.ui.js?v=17"></script>
+    <script src="/js/app.js?v=17"></script>
 </body>
-
 </html>

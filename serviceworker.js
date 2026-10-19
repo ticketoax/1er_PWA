@@ -1,111 +1,148 @@
-
-const CACHE_NAME = 'coffee-pwa-v2';
-
-const ARCHIVOS = [
-    './',
-    './index.html',
-    './detalle.html',
-    './manifest.json',
-    './css/style.css',
-    './js/app.js',
-    './imagenes/icons/icon-72x72.png',
-    './imagenes/icons/icon-96x96.png',
-    './imagenes/icons/icon-128x128.png',
-    './imagenes/icons/icon-144x144.png',
-    './imagenes/icons/icon-152x152.png',
-    './imagenes/icons/icon-192x192.png',
-    './imagenes/icons/icon-384x384.png',
-    './imagenes/icons/icon-512x512.png'
+const CACHE_PREFIX = "coffee-pwa-";
+const CACHE_NAME = `${CACHE_PREFIX}v17`;
+const STATIC_DESTINATIONS = new Set([
+  "font",
+  "image",
+  "manifest",
+  "script",
+  "style"
+]);
+const ASSETS_TO_CACHE = [
+  "/index.html",
+  "/detalle.html",
+  "/js/app.js",
+  "/js/pokemon.service.js",
+  "/js/pokemon.ui.js",
+  "/manifest.json",
+  "/css/style.css",
+  "/imagenes/coffe1.jpg",
+  "/imagenes/coffe2.jpg",
+  "/imagenes/coffe3.jpg",
+  "/imagenes/coffe4.jpg",
+  "/imagenes/coffe5.jpg",
+  "/imagenes/coffe6.jpg",
+  "/imagenes/coffe7.jpg",
+  "/imagenes/coffe8.jpg",
+  "/imagenes/coffe9.jpg",
+  "/imagenes/coffe10.jpeg",
+  "/imagenes/icons/icon-72x72.png",
+  "/imagenes/icons/icon-96x96.png",
+  "/imagenes/icons/icon-128x128.png",
+  "/imagenes/icons/icon-144x144.png",
+  "/imagenes/icons/icon-152x152.png",
+  "/imagenes/icons/icon-192x192.png",
+  "/imagenes/icons/icon-384x384.png",
+  "/imagenes/icons/icon-512x512.png"
 ];
 
-// INSTALAR SERVICE WORKER
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(ARCHIVOS);
-            })
-    );
-
-    self.skipWaiting();
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(ASSETS_TO_CACHE))
+      .then(() => self.skipWaiting())
+  );
 });
 
-// ACTIVAR SERVICE WORKER
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys()
-            .then((nombres) => {
-                return Promise.all(
-                    nombres
-                        .filter(nombre => nombre !== CACHE_NAME)
-                        .map(nombre => caches.delete(nombre))
-                );
-            })
-    );
-
-    self.clients.claim();
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((cacheNames) => Promise.all(
+        cacheNames
+          .filter((cacheName) =>
+            cacheName.startsWith(CACHE_PREFIX) && cacheName !== CACHE_NAME
+          )
+          .map((cacheName) => caches.delete(cacheName))
+      ))
+      .then(() => self.clients.claim())
+  );
 });
 
-// CACHE FIRST
-function cacheFirst(request) {
-    return caches.match(request)
-        .then((respuesta) => {
-            if (respuesta) {
-                return respuesta;
-            }
-
-            return fetch(request);
-        });
+function isCacheableResponse(request, response) {
+  return response.ok &&
+    response.type === "basic" &&
+    new URL(request.url).origin === self.location.origin;
 }
 
-// NETWORK FIRST
-function networkFirst(request) {
-    return fetch(request)
-        .then((respuesta) => {
-            if (respuesta && respuesta.ok) {
-                const copia = respuesta.clone();
+function cacheResponse(event, request, response) {
+  if (isCacheableResponse(request, response)) {
+    const cacheUpdate = caches.open(CACHE_NAME)
+      .then((cache) => cache.put(request, response.clone()));
 
-                caches.open(CACHE_NAME)
-                    .then((cache) => {
-                        cache.put(request, copia);
-                    });
-            }
+    event.waitUntil(
+      cacheUpdate.catch((error) => {
+        console.error("No se pudo guardar la respuesta en caché:", error);
+      })
+    );
+  }
 
-            return respuesta;
-        })
-        .catch(() => {
-            return caches.match(request)
-                .then((respuesta) => {
-                    if (respuesta) {
-                        return respuesta;
-                    }
-
-                    return new Response('No hay conexión a internet ni una copia guardada.', {
-                        status: 503,
-                        headers: {
-                            'Content-Type': 'text/plain; charset=utf-8'
-                        }
-                    });
-                });
-        });
+  return response;
 }
 
-// EVENTO FETCH
-self.addEventListener('fetch', (event) => {
-    if (event.request.method !== 'GET') {
-        return;
-    }
+function matchCache(request, options) {
+  return caches.open(CACHE_NAME)
+    .then((cache) => cache.match(request, options));
+}
 
-    const url = new URL(event.request.url);
+// 1. Cache First: entrega primero los recursos estáticos almacenados.
+function cacheFirst(event, request) {
+  return matchCache(request)
+    .then((cachedResponse) => {
+      if (cachedResponse) return cachedResponse;
 
-    // CACHE FIRST: archivos locales
-    if (url.origin === self.location.origin &&
-        !url.pathname.endsWith('.html')) {
-        event.respondWith(cacheFirst(event.request));
-    }
+      return fetch(request)
+        .then((networkResponse) =>
+          cacheResponse(event, request, networkResponse)
+        );
+    });
+}
 
-    // NETWORK FIRST: páginas HTML
-    else {
-        event.respondWith(networkFirst(event.request));
-    }
+// 2. Network First: intenta actualizar los documentos y usa la copia offline
+//    solamente si falla la conexión.
+function networkFirst(event, request) {
+  return fetch(request)
+    .then((networkResponse) =>
+      cacheResponse(event, request, networkResponse)
+    )
+    .catch(async (networkError) => {
+      const cachedResponse = await matchCache(request, {
+        ignoreSearch: request.mode === "navigate"
+      });
+      if (cachedResponse) return cachedResponse;
+
+      const requestURL = new URL(request.url);
+      const scopeURL = new URL(self.registration.scope);
+      if (
+        request.mode === "navigate" &&
+        requestURL.pathname === scopeURL.pathname
+      ) {
+        const indexURL = new URL("index.html", scopeURL);
+        const cachedIndex = await matchCache(indexURL.href);
+        if (cachedIndex) return cachedIndex;
+      }
+
+      throw networkError;
+    });
+}
+
+self.addEventListener("fetch", (event) => {
+  const request = event.request;
+  if (request.method !== "GET") return;
+
+  const requestURL = new URL(request.url);
+  const scopeURL = new URL(self.registration.scope);
+  const isInScope = requestURL.origin === scopeURL.origin &&
+    requestURL.pathname.startsWith(scopeURL.pathname);
+
+  // Deja que el navegador gestione recursos externos, como Google Fonts.
+  if (!isInScope) return;
+
+  // Cache First va primero para recursos estáticos; las peticiones dinámicas
+  // y las navegaciones pasan después por Network First.
+  if (STATIC_DESTINATIONS.has(request.destination)) {
+    event.respondWith(cacheFirst(event, request));
+    return;
+  }
+
+  // Network First se aplica después, únicamente a navegaciones HTML.
+  event.respondWith(networkFirst(event, request));
 });

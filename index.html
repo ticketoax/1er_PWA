@@ -1,78 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Coffee PWA</title>
+    <title>Coffee PWA | Catálogo de Especialidad</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="/css/style.css?v=17">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#3D2314">
 
-    <!-- Color de la PWA -->
-    <meta name="theme-color" content="#124443">
-
-    <!-- Iconos --> 
-    <link rel="apple-touch-icon" sizes="72x72" href="imagenes/icons/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="imagenes/icons/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="128x128" href="imagenes/icons/icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="imagenes/icons/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="imagenes/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="imagenes/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="384x384" href="imagenes/icons/icon-384x384.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="imagenes/icons/icon-512x512.png">
-
+    <link rel="apple-touch-icon" sizes="72x72" href="/imagenes/icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/imagenes/icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="/imagenes/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/imagenes/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/imagenes/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/imagenes/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="/imagenes/icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/imagenes/icons/icon-512x512.png">
 </head>
 
 <body>
-
     <main>
+        <header class="app-header">
+            <nav>
+                <a href="/index.html" class="brand" aria-label="Coffee PWA Inicio">
+                    <img src="/imagenes/icons/icon-72x72.png" alt="Coffee PWA Logo" class="brand-logo">
+                    <h1>Coffee PWA</h1>
+                </a>
+                <ul>
+                    <li><a href="/index.html" class="active">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
 
-        <nav>
-            <h1>Coffee PWA</h1>
+            <section class="hero-banner">
+                <span class="hero-badge">Granos de Especialidad</span>
+                <h2 class="hero-title">Café artesanal preparado al momento</h2>
+                <p class="hero-subtitle">Descubrí nuestra selección de granos mexicanos y bebidas de especialidad diseñadas para cada momento del día.</p>
+            </section>
+        </header>
 
-            <ul>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-            </ul>
-        </nav>
+        <section class="catalog-section" aria-label="Nuestra selección de cafés">
+            <div class="container" id="coffee-list"></div>
+        </section>
 
-        <div class="toolbar">
-            <button id="boton-instalar" class="boton-instalar" hidden>Instalar app</button>
-        </div>
-
-        <div class="container" id="lista-cafes"></div>
-
+        <section class="catalog-section" aria-label="Colección Pokémon" id="pokemon-catalog">
+            <div class="section-heading">
+                <span class="hero-badge">PokeAPI Integración</span>
+                <h2 class="section-title">Colección Pokémon</h2>
+                <p class="section-subtitle">Explorá los ejemplares sincronizados en tiempo real desde la PokeAPI oficial.</p>
+            </div>
+            <div class="container" id="pokemon-list"></div>
+            <div class="load-more-container" id="pokemon-pagination"></div>
+        </section>
     </main>
 
-    <!-- JavaScript -->
-    <script src="js/app.js"></script>
-
-    <!-- Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            const esLocalhost = ['localhost', '127.0.0.1', ''].includes(window.location.hostname)
-                || window.location.protocol === 'https:';
-
-            if (esLocalhost) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./serviceworker.js', { scope: './' })
-                        .then(() => {
-                            console.log('Service Worker registrado correctamente');
-                        })
-                        .catch((error) => {
-                            console.error('Error al registrar Service Worker:', error);
-                        });
-                });
-            }
-        }
-    </script>
-
+    <script src="/js/pokemon.service.js?v=17"></script>
+    <script src="/js/pokemon.ui.js?v=17"></script>
+    <script src="/js/app.js?v=17"></script>
 </body>
-
 </html>
