@@ -1,3 +1,4 @@
+
 const coffeeProducts = [
   {
     title: "Café Americano",
@@ -95,7 +96,7 @@ const coffeeProducts = [
     image: "/imagenes/coffe8.jpg",
     alt: "Cold Brew"
   },
-    {
+  {
     title: "Cold Brew",
     description: "Frío, suave y refrescante.",
     details: "Extraído lentamente en frío durante varias horas para lograr un sabor menos ácido.",
@@ -107,7 +108,7 @@ const coffeeProducts = [
     image: "/imagenes/coffe9.jpg",
     alt: "Cold Brew"
   },
-    {
+  {
     title: "Cold Brew",
     description: "Frío, suave y refrescante.",
     details: "Extraído lentamente en frío durante varias horas para lograr un sabor menos ácido.",
@@ -123,7 +124,39 @@ const coffeeProducts = [
 
 const coffeeList = document.getElementById("coffee-list");
 const detailPage = document.getElementById("detalle-producto");
+
 let deferredInstallPrompt;
+
+const installButton = document.getElementById("install-button");
+
+// Instalación de Coffee PWA
+if (installButton) {
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+    installButton.hidden = false;
+  });
+
+  installButton.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+
+    deferredInstallPrompt.prompt();
+
+    const { outcome } = await deferredInstallPrompt.userChoice;
+
+    deferredInstallPrompt = null;
+
+    if (outcome === "accepted") {
+      installButton.hidden = true;
+    }
+  });
+
+  window.addEventListener("appinstalled", () => {
+    installButton.hidden = true;
+    deferredInstallPrompt = null;
+  });
+}
 
 function renderProducts() {
   if (!coffeeList) return;
@@ -146,7 +179,7 @@ function renderProducts() {
     </article>
   `).join("");
 
-  // Inicializar sección de Pokémon si está disponible en el DOM
+  // Inicializar la sección de Pokémon si está disponible
   if (document.getElementById("pokemon-list") && window.PokemonUI) {
     window.PokemonUI.initHome("pokemon-list");
   }
@@ -158,7 +191,7 @@ function renderProductDetailPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const pokemonId = urlParams.get("pokemon");
 
-  // Si la petición corresponde a un Pokémon, delegar al módulo PokemonUI
+  // Mostrar detalles de Pokémon cuando corresponda
   if (pokemonId) {
     if (window.PokemonUI) {
       window.PokemonUI.initDetail(pokemonId, "detalle-producto");
@@ -166,9 +199,8 @@ function renderProductDetailPage() {
     return;
   }
 
-  // Flujo original del catálogo de café (100% intacto)
+  // Mostrar detalles del café seleccionado
   const productIndex = Number(urlParams.get("product"));
-
   const product = coffeeProducts[productIndex];
 
   if (!product) {
@@ -218,18 +250,22 @@ function renderProductDetailPage() {
 renderProducts();
 renderProductDetailPage();
 
-
-
-
+// Registrar el Service Worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/serviceworker.js")
       .then((registration) => {
-        console.log("Service Worker registrado con éxito:", registration.scope);
+        console.log(
+          "Service Worker registrado con éxito:",
+          registration.scope
+        );
       })
       .catch((error) => {
-        console.error("Error al registrar el Service Worker:", error);
+        console.error(
+          "Error al registrar el Service Worker:",
+          error
+        );
       });
   });
 } else {
