@@ -9,7 +9,7 @@ const coffeeProducts = [
     origin: "Granos Arábica de Chiapas.",
     recommendation: "Perfecto para acompañar pan dulce, galletas o un desayuno ligero.",
     price: 45.0,
-    image: "/imagenes/coffe1.jpg",
+    image: "imagenes/coffe1.jpg",
     alt: "Café Americano"
   },
   {
@@ -21,7 +21,7 @@ const coffeeProducts = [
     origin: "Granos Arábica de Veracruz.",
     recommendation: "Ideal para acompañar con un croissant, pastel de vainilla o galletas.",
     price: 55.0,
-    image: "/imagenes/coffe2.jpg",
+    image: "imagenes/coffe2.jpg",
     alt: "Café Latte"
   },
   {
@@ -33,7 +33,7 @@ const coffeeProducts = [
     origin: "Mezcla de granos mexicanos.",
     recommendation: "Excelente para iniciar el día acompañado de un muffin o pan artesanal.",
     price: 60.0,
-    image: "/imagenes/coffe3.jpg",
+    image: "imagenes/coffe3.jpg",
     alt: "Cappuccino"
   },
   {
@@ -45,7 +45,7 @@ const coffeeProducts = [
     origin: "Granos seleccionados de Oaxaca.",
     recommendation: "Ideal para quienes disfrutan bebidas dulces y postres.",
     price: 65.0,
-    image: "/imagenes/coffe4.jpg",
+    image: "imagenes/coffe4.jpg",
     alt: "Café Mocha"
   },
   {
@@ -57,7 +57,7 @@ const coffeeProducts = [
     origin: "Granos Arábica Premium.",
     recommendation: "Perfecto después de los alimentos o para un impulso de energía.",
     price: 50.0,
-    image: "/imagenes/coffe5.jpg",
+    image: "imagenes/coffe5.jpg",
     alt: "Espresso"
   },
   {
@@ -69,7 +69,7 @@ const coffeeProducts = [
     origin: "Granos de altura de Chiapas.",
     recommendation: "Excelente con pan artesanal o tostadas.",
     price: 58.0,
-    image: "/imagenes/coffe6.jpg",
+    image: "imagenes/coffe6.jpg",
     alt: "Flat White"
   },
   {
@@ -81,7 +81,7 @@ const coffeeProducts = [
     origin: "Café mexicano de especialidad.",
     recommendation: "Ideal para amantes del café fuerte y aromático.",
     price: 52.0,
-    image: "/imagenes/coffe7.jpg",
+    image: "imagenes/coffe7.jpg",
     alt: "Macchiato"
   },
   {
@@ -93,7 +93,7 @@ const coffeeProducts = [
     origin: "Granos Arábica seleccionados.",
     recommendation: "Perfecto para tardes calurosas y días de verano.",
     price: 62.0,
-    image: "/imagenes/coffe8.jpg",
+    image: "imagenes/coffe8.jpg",
     alt: "Cold Brew"
   },
   {
@@ -105,7 +105,7 @@ const coffeeProducts = [
     origin: "Granos Arábica seleccionados.",
     recommendation: "Perfecto para tardes calurosas y días de verano.",
     price: 62.0,
-    image: "/imagenes/coffe9.jpg",
+    image: "imagenes/coffe9.jpg",
     alt: "Cold Brew"
   },
   {
@@ -117,7 +117,7 @@ const coffeeProducts = [
     origin: "Granos Arábica seleccionados.",
     recommendation: "Perfecto para tardes calurosas y días de verano.",
     price: 62.0,
-    image: "/imagenes/coffe10.jpeg",
+    image: "imagenes/coffe10.jpeg",
     alt: "Cold Brew"
   }
 ];
@@ -172,7 +172,7 @@ function renderProducts() {
 
         <span>$${product.price.toFixed(2)}</span>
 
-        <a class="view-more" href="/detalle.html?product=${index}">
+        <a class="view-more" href="detalle.html?product=${index}">
           Ver más
         </a>
       </div>
@@ -204,14 +204,14 @@ function renderProductDetailPage() {
   const product = coffeeProducts[productIndex];
 
   if (!product) {
-    window.location.href = "/index.html";
+    window.location.href = "index.html";
     return;
   }
 
   detailPage.innerHTML = `
     <article class="detail-content">
 
-      <a class="back-button" href="/index.html">
+      <a class="back-button" href="index.html">
         ← Volver al menú
       </a>
 
@@ -254,7 +254,7 @@ renderProductDetailPage();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/serviceworker.js")
+      .register("./serviceworker.js")
       .then((registration) => {
         console.log(
           "Service Worker registrado con éxito:",

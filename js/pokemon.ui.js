@@ -64,7 +64,7 @@
             alt="Ilustración oficial de ${pokemon.name}" 
             loading="lazy"
             decoding="async"
-            onerror="this.onerror=null; this.src='/imagenes/icons/icon-192x192.png'; this.classList.add('img-fallback');"
+            onerror="this.onerror=null; this.src='imagenes/icons/icon-192x192.png'; this.classList.add('img-fallback');"
           >
         </div>
 
@@ -115,7 +115,7 @@
 
     return `
       <article class="detail-content pokemon-detail-content">
-        <a class="back-button" href="/index.html#pokemon-catalog">
+        <a class="back-button" href="index.html#pokemon-catalog">
           ← Volver al catálogo
         </a>
 
@@ -123,7 +123,7 @@
           <img 
             src="${pokemon.image}" 
             alt="Ilustración oficial de ${pokemon.name}"
-            onerror="this.onerror=null; this.src='/imagenes/icons/icon-512x512.png';"
+            onerror="this.onerror=null; this.src='imagenes/icons/icon-512x512.png';"
           >
         </div>
 
@@ -311,7 +311,7 @@
             <div class="error-icon">🔍</div>
             <h3>Pokémon no disponible</h3>
             <p>${msg}</p>
-            <a class="view-more retry-btn" href="/index.html#pokemon-catalog">
+            <a class="view-more retry-btn" href="index.html#pokemon-catalog">
               ← Volver al catálogo
             </a>
           </div>

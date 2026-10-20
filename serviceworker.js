@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "coffee-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v18`;
+const CACHE_NAME = `${CACHE_PREFIX}v19`;
 const STATIC_DESTINATIONS = new Set([
   "font",
   "image",

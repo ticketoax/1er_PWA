@@ -2,7 +2,7 @@
 {
     "name": "Coffee PWA",
     "short_name": "Coffee",
-    "start_url": "/index.html",
+    "start_url": "index.html",
     "display": "standalone",
     "background_color": "#db4938",
     "theme_color": "#124443",
@@ -51,4 +51,3 @@
         }
     ]
 }
-

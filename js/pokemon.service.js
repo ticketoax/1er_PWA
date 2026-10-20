@@ -96,7 +96,7 @@
       id,
       name: capitalize(rawItem.name),
       image: getOfficialArtworkUrl(id),
-      detailUrl: `/detalle.html?pokemon=${id}`
+      detailUrl: `detalle.html?pokemon=${id}`
     };
   }
 
